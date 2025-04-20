@@ -98,12 +98,6 @@ forge install
 forge script script/DeployMinimal.s.sol --rpc-url $RPC_URL --broadcast --verify --account <accountAlias>
 ```
 
-### Run simulation
-
-```bash
-forge script script/SendPackedUserOp.s.sol --rpc-url $RPC_URL --account <accountAlias>
-```
-
 ### Run tests
 
 ```bash
