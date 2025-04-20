@@ -5,30 +5,6 @@ This project demonstrates smart contract wallets (Account Abstraction, AA) for *
 
 ---
 
-## 🔁 Account Abstraction Flow
-
-### 📦 Ethereum Flow (Manual AA with EntryPoint)
-
-```mermaid
-flowchart TD
-    A[EOA signs packed UserOp] --> B[Send UserOp to EntryPoint]
-    B --> C[EntryPoint calls validateUserOp() on MinimalAccount]
-    C --> D[validateSignature + nonce checks]
-    D --> E[If valid, EntryPoint calls execute() on MinimalAccount]
-    E --> F[Tx is executed]
-```
-
-### 🌀 zkSync Flow (Native AA support)
-
-```mermaid
-flowchart TD
-    A[EOA sends tx with smart wallet sender] --> B[zkSync verifies via validateTransaction()]
-    B --> C[zkSync calls executeTransaction()]
-    C --> D[Smart account logic executed]
-```
-
----
-
 ## 🧱 Contracts
 
 ### MinimalAccount.sol (Ethereum)
@@ -37,7 +13,7 @@ A smart contract wallet that complies with Ethereum’s AA pattern using the Ent
 
 - `validateUserOp(...)`: Verifies signature and nonce.
 - `execute(...)`: Executes the desired operation.
-- `nonce`, `owner`, and entry point logic included.
+- `owner`, and entry point logic included.
 
 ### ZkMinimalAccount.sol (zkSync)
 
@@ -86,14 +62,14 @@ Generates a signed `UserOperation` (packed format), and simulates the process of
 ## 📁 Directory Structure
 
 ```
-contracts/
+src/
 │   MinimalAccount.sol
 │   ZkMinimalAccount.sol
 scripts/
 │   DeployMinimal.s.sol
 │   helperConfig.s.sol
 │   SendPackedUserOp.s.sol
-test/
+tests/
 │   MinimalAccount.t.sol
 │   ZkMinimalAccount.t.sol
 ```
@@ -145,6 +121,3 @@ forge test
 
 ---
 
-## 🧑‍💻 Author
-
-Made with 💙 by a dev exploring smart contract wallets on L2s.
