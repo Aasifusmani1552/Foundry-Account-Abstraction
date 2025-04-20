@@ -1,66 +1,107 @@
-## Foundry
+🧠 Account Abstraction Project: Ethereum & zkSync
+This project demonstrates smart contract wallets (Account Abstraction, AA) for Ethereum and zkSync, simulating the full flow of user operations. It includes deployment, configuration, and testing of minimal AA-compatible accounts on both chains.
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+🔁 Account Abstraction Flow
+📦 Ethereum Flow (Manual AA with EntryPoint)
+flowchart TD
+A[EOA signs packed UserOp] --> B[Send UserOp to EntryPoint]
+B --> C[EntryPoint calls validateUserOp() on MinimalAccount]
+C --> D[validateSignature + nonce checks]
+D --> E[If valid, EntryPoint calls execute() on MinimalAccount]
+E --> F[Tx is executed]
 
-Foundry consists of:
+🌀 zkSync Flow (Native AA support)
+flowchart TD
+A[EOA sends tx with smart wallet sender] --> B[zkSync verifies via validateTransaction()]
+B --> C[zkSync calls executeTransaction()]
+C --> D[Smart account logic executed]
 
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+🧱 Contracts
+MinimalAccount.sol (Ethereum)
+A smart contract wallet that complies with Ethereum’s AA pattern using the EntryPoint contract.
 
-## Documentation
+validateUserOp(...): Verifies signature and nonce.
 
-https://book.getfoundry.sh/
+execute(...): Executes the desired operation.
 
-## Usage
+nonce, owner, and entry point logic included.
 
-### Build
+ZkMinimalAccount.sol (zkSync)
+A zkSync-native account abstraction wallet. Implements required methods for zkSync’s protocol-level AA:
 
-```shell
-$ forge build
-```
+validateTransaction(...)
 
-### Test
+executeTransaction(...)
 
-```shell
-$ forge test
-```
+🛠️ Scripts
+DeployMinimal.s.sol
+Deploys the MinimalAccount.sol on Ethereum with configurable entry point and deployer account.
 
-### Format
+helperConfig.s.sol
+A utility script that provides environment-specific configuration:
 
-```shell
-$ forge fmt
-```
+Detects chain ID (Anvil, Sepolia, etc.)
 
-### Gas Snapshots
+Returns EntryPoint contract address
 
-```shell
-$ forge snapshot
-```
+Deploys a mock EntryPoint when running on Anvil
 
-### Anvil
+Manages deployer accounts for local/testnet environments
 
-```shell
-$ anvil
-```
+SendPackedUserOp.s.sol
+Generates a signed UserOperation (packed format), and simulates the process of sending it to the EntryPoint for execution—this script mimics the entire AA lifecycle.
 
-### Deploy
+🧪 Tests
+MinimalAccount.t.sol
+Tests validation, execution, and signature handling on Ethereum
 
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
-```
+Covers mock EntryPoint interactions for complete AA simulation
 
-### Cast
+ZkMinimalAccount.t.sol
+Tests zkSync native AA methods (validateTransaction, executeTransaction)
 
-```shell
-$ cast <subcommand>
-```
+No deployment script (due to lack of full forge script support on zkSync yet)
 
-### Help
+📁 Directory Structure
+contracts/
+│ MinimalAccount.sol
+│ ZkMinimalAccount.sol
+scripts/
+│ DeployMinimal.s.sol
+│ helperConfig.s.sol
+│ SendPackedUserOp.s.sol
+test/
+│ MinimalAccount.t.sol
+│ ZkMinimalAccount.t.sol
 
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
-```
+🌐 Compatibility
+✅ Ethereum (tested with local Anvil and Sepolia)
+
+✅ zkSync (native AA, tested via zkSync development tools)
+
+❌ No zkSync forge script deployment yet (as zkSync doesn’t support it)
+
+🚀 Getting Started
+Install dependencies
+forge install
+
+Deploy MinimalAccount (Ethereum)
+forge script script/DeployMinimal.s.sol --rpc-url $RPC_URL --broadcast --verify --account <accountAlias>
+
+Run simulation
+forge script script/SendPackedUserOp.s.sol --rpc-url $RPC_URL --account <accountAlias>
+
+Run tests
+forge test
+
+🧠 Learn More
+EIP-4337: https://eips.ethereum.org/EIPS/eip-4337
+
+zkSync AA Docs: https://era.zksync.io/docs/
+
+Foundry Book: https://book.getfoundry.sh/
+
+zkSync Foundry Support: https://foundry-book.zksync.io/
+
+🧑‍💻 Author
+Made with 💙 by a dev exploring smart contract wallets on L2s.
