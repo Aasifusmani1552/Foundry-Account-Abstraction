@@ -1,4 +1,3 @@
-
 # 🧠 Account Abstraction Project: Ethereum & zkSync
 
 This project demonstrates smart contract wallets (Account Abstraction, AA) for **Ethereum** and **zkSync**, simulating the full flow of user operations. It includes deployment, configuration, and testing of minimal AA-compatible accounts on both chains.
@@ -115,3 +114,4 @@ forge test
 
 ---
 
+The end
